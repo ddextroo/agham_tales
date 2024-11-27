@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         ),
         brightness: Brightness.light,
         primaryButtonTheme: const ShadButtonTheme(
-          backgroundColor: Color(0xFF005A17),
+          backgroundColor: Color(0xFF0284c7),
         ),
         outlineButtonTheme:
         const ShadButtonTheme(foregroundColor: Color(0xFF171717)),
