@@ -10,18 +10,17 @@ class Splashscreen extends StatefulWidget {
 }
 
 class _SplashscreenState extends State<Splashscreen> {
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Color(0xFFFEFEFE), // Transparent status bar
+      statusBarColor: Color(0xFF0284c7), // Transparent status bar
     ));
     Future.delayed(const Duration(milliseconds: 1500), () {
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/onboarding');
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,15 +31,20 @@ class _SplashscreenState extends State<Splashscreen> {
         ),
       ),
       body: Container(
-        color: const Color(0xFFFEFEFE),
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(
+            colors: [Color(0xFF46b6f0), Color(0xFF0284c7)], // Dark blue and blue
+            center: Alignment.center,
+            radius: 1.0,
+          ),
+        ),
         child: SizedBox(
           width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text("test")
-              // Image.asset('assets/images/logo-transparent.png',
-              //     width: 170, height: 170),
+              Image.asset('assets/images/logo-no-bg.png',
+                  width: 170, height: 170),
             ],
           ),
         ),

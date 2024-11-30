@@ -1,4 +1,5 @@
 import 'package:agham_tales/view/home.dart';
+import 'package:agham_tales/view/onboarding.dart';
 import 'package:agham_tales/view/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       home: const Splashscreen(),
       routes: {
         '/splash': (context) => const Splashscreen(),
+        '/onboarding': (context) => OnboardingScreen(),
         '/home': (context) => const HomeScreen(),
       },
     );
