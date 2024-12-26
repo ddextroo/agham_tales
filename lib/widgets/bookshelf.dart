@@ -65,6 +65,7 @@ class _BookCoverState extends State<BookCover> {
                 children: [
                   Image.asset(
                     widget.imageUrl,
+                    alignment: Alignment.topCenter,
                     fit: BoxFit.cover,
                   ),
                   if (_isLocked)
