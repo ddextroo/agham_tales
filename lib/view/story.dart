@@ -67,15 +67,28 @@ class _StoryBookState extends State<StoryBook> {
           const SizedBox(width: 16),
           FloatingActionButton(
             heroTag: 'previous',
-            onPressed: () => goToPage(_controller.pageNumber! - 1),
+            onPressed: () => _controller.pageNumber! <= 1 ? null : goToPage(_controller.pageNumber! - 1),
             child: const Icon(LucideIcons.arrowLeft),
           ),
           const SizedBox(width: 16),
           FloatingActionButton(
             heroTag: 'next',
+              onPressed: () => _controller.pageNumber! >= _controller.pageCount ? null : goToPage(_controller.pageNumber! + 1),
+            child: const Icon(LucideIcons.arrowRight),
+          ),
+          const SizedBox(width: 16),
+          FloatingActionButton(
+            heroTag: 'audio',
             onPressed: () => goToPage(_controller.pageNumber! + 1)
                 ,
-            child: const Icon(LucideIcons.arrowRight),
+            child: const Icon(LucideIcons.music),
+          ),
+          const SizedBox(width: 16),
+          FloatingActionButton(
+            heroTag: 'repeat',
+            onPressed: () => goToPage(1)
+                ,
+            child: const Icon(LucideIcons.repeat),
           ),
         ],
       ),
