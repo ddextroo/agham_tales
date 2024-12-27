@@ -1,6 +1,7 @@
 import 'package:agham_tales/view/home.dart';
 import 'package:agham_tales/view/onboarding.dart';
 import 'package:agham_tales/view/splash.dart';
+import 'package:agham_tales/view/story.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         '/splash': (context) => const Splashscreen(),
         '/onboarding': (context) => OnboardingScreen(),
         '/home': (context) => const HomeScreen(),
+        '/story': (context) => const StoryBook(),
       },
     );
   }

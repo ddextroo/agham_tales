@@ -39,6 +39,8 @@ dependencies:
   google_fonts: ^6.2.1
   introduction_screen: ^3.1.14
   shared_preferences: ^2.3.3
+  pdfrx: ^1.0.94
+  lucide_icons: ^0.257.0
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +68,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/cover_books/
+    - assets/stories/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

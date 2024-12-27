@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../widgets/bookshelf.dart';
 
@@ -12,6 +13,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
         //   iconSize: 20,
         // ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.info), iconSize: 20, color: Colors.white,)
+          IconButton(onPressed: () {}, icon: Icon(LucideIcons.info), iconSize: 20, color: Colors.white,)
         ],
       ),
       body: Padding(

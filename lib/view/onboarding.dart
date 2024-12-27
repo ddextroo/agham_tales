@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     prefs.clear();
     bool? isFirstTime = prefs.getBool("first_time") ?? false;
 
-    if (isFirstTime) {
+    if (!isFirstTime) {
       Navigator.popAndPushNamed(context, "/home");
     }
   }
@@ -68,7 +69,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       skip: Text("Skip",
           style:
               TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF212121))),
-      next: Icon(Icons.arrow_forward, color: Colors.blue),
+      next: Icon(LucideIcons.arrowRight, color: Colors.blue),
       done: Text("Get Started",
           style:
               TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF212121))),
