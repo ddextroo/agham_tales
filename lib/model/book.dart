@@ -1,12 +1,21 @@
 class Book {
   final String imageUrl;
+  final String pdfPath;
   final String title;
-  final double progress;
-  final bool isLocked;
-  final int currentPage;
+  bool? isLocked;
+  int? currentPage;
   final int totalPages;
-  final int? quizScore;
-  final int? totalQuizScore;
+  int? quizScore;
+  final int totalQuizScore;
 
-  Book(this.imageUrl, this.progress, this.isLocked, this.currentPage, this.totalPages, this.quizScore, this.totalQuizScore, {required this.title});
+  Book({
+    required this.imageUrl,
+    required this.pdfPath,
+    required this.title,
+    this.isLocked,
+    this.currentPage,
+    required this.totalPages,
+    this.quizScore,
+    required this.totalQuizScore,
+  });
 }

@@ -18,7 +18,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Future<void> _firstTime() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+    // prefs.clear();
     bool? isFirstTime = prefs.getBool("first_time") ?? false;
 
     if (!isFirstTime) {

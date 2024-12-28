@@ -37,7 +37,17 @@ class MyApp extends StatelessWidget {
         '/splash': (context) => const Splashscreen(),
         '/onboarding': (context) => OnboardingScreen(),
         '/home': (context) => const HomeScreen(),
-        '/story': (context) => const StoryBook(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/story') {
+          final args = settings.arguments as Map<String, dynamic>?;
+          final bookPath = args?['book'] ?? '';
+          final title = args?['title'] ?? '';
+          return MaterialPageRoute(
+            builder: (context) => StoryBook(book: bookPath, title: title,),
+          );
+        }
+        return null; // If no route matches, return null
       },
     );
   }

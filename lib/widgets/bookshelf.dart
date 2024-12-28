@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BookCover extends StatefulWidget {
   final String imageUrl;
   final String title;
   final double progress;
-  final bool isLocked;
-  final int currentPage;
+  final bool? isLocked;
+  final int? currentPage;
   final int totalPages;
+  final String pdfPath;
   final int? quizScore;
-  final int? totalQuizScore;
+  final int totalQuizScore;
 
   const BookCover({
     super.key,
     required this.imageUrl,
     required this.title,
     required this.progress,
-    required this.isLocked,
-    required this.currentPage,
+    this.isLocked,
+    this.currentPage,
     required this.totalPages,
+    required this.pdfPath,
     this.quizScore,
-    this.totalQuizScore,
+    required this.totalQuizScore,
   });
 
   @override
@@ -33,18 +36,23 @@ class _BookCoverState extends State<BookCover> {
   @override
   void initState() {
     super.initState();
-    _isLocked = widget.isLocked;
+    _isLocked = widget.isLocked ?? false;
   }
 
-  void _toggleLock() {
-    setState(() {
-      _isLocked = !_isLocked;
-    });
-  }
+  // void _toggleLock() async {
+  //   setState(() {
+  //     _isLocked = !_isLocked;
+  //   });
+  //
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final keyPrefix = 'book_${widget.title.hashCode}';
+  //   prefs.setBool('$keyPrefix.isLocked', _isLocked);
+  // }
 
   void _navigateToNewPage() {
     if (!_isLocked) {
-      Navigator.popAndPushNamed(context, "/story");
+      Navigator.popAndPushNamed(context, "/story",
+          arguments: {"book": widget.pdfPath, "title": widget.title});
     }
   }
 
@@ -84,11 +92,10 @@ class _BookCoverState extends State<BookCover> {
                     Center(
                       child: IconButton(
                         icon: Icon(
-                          _isLocked ? LucideIcons.lock : LucideIcons.unlock,
+                          _isLocked ? LucideIcons.lock : null,
                           color: Colors.white,
                           size: 32,
-                        ),
-                        onPressed: _toggleLock,
+                        ), onPressed: () {  },
                       ),
                     ),
                   ],
@@ -132,7 +139,8 @@ class _BookCoverState extends State<BookCover> {
                         color: Colors.grey[600],
                       ),
                     ),
-                    if (widget.quizScore != null && widget.totalQuizScore != null)
+                    if (widget.quizScore != null &&
+                        widget.totalQuizScore != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 4),
                         child: Text(
