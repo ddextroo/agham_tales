@@ -14,7 +14,6 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late Future<List<Book>> _booksFuture;
@@ -78,13 +77,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     childAspectRatio: 0.60,
                     children: books.map((book) {
                       // Calculate progress based on currentPage
-                      double progress = (book.currentPage ?? 0) / book.totalPages;
+                      double progress =
+                          (book.currentPage ?? 0) / book.totalPages;
 
                       return BookCover(
                         imageUrl: book.imageUrl,
                         title: book.title,
                         progress: progress,
                         totalPages: book.totalPages,
+                        isLocked: book.isLocked,
                         currentPage: (book.currentPage ?? 0),
                         pdfPath: book.pdfPath,
                         totalQuizScore: book.totalQuizScore,
@@ -100,4 +101,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

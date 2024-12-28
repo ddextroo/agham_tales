@@ -44,7 +44,7 @@ class BookController {
         await prefs.setString('$keyPrefix.pdfPath', defaultBooks[i].pdfPath);
         await prefs.setString('$keyPrefix.title', defaultBooks[i].title);
         await prefs.setBool('$keyPrefix.isLocked', i == 0 ? false : true);
-        await prefs.setInt('$keyPrefix.currentPage', 0);
+        await prefs.setInt('$keyPrefix.currentPage', 1);
         await prefs.setInt('$keyPrefix.totalPages', defaultBooks[i].totalPages);
         await prefs.setInt('$keyPrefix.quizScore', 0);
         await prefs.setInt('$keyPrefix.totalQuizScore', defaultBooks[i].totalQuizScore ?? 0);

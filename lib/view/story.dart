@@ -5,6 +5,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/story_controller.dart';
+import '../widgets/dictionary_dialog.dart';
 
 class StoryBook extends StatefulWidget {
   final String book;
@@ -72,6 +73,20 @@ class _StoryBookState extends State<StoryBook> {
       print("PDF is not ready yet.");
     }
   }
+  void showDictionaryDialog(BuildContext context, String word) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: DictionaryDialog(
+          word: word,
+          pronunciation: "/lēf/",
+          partOfSpeech: "noun",
+          definition: "Small green parts of a plant",
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,13 +94,31 @@ class _StoryBookState extends State<StoryBook> {
       body: PdfViewer.asset(
         widget.book,
         controller: _controller,
-        params: const PdfViewerParams(
-          enableKeyboardNavigation: false,
-          scaleEnabled: false,
-          panEnabled: false,
+        params: PdfViewerParams(
+          linkHandlerParams: PdfLinkHandlerParams(
+            linkColor: const Color(0x00000000),
+            onLinkTap: (link) {
+              showDictionaryDialog(context, "Leaf");
+              // showShadSheet(
+              //     side: ShadSheetSide.bottom,
+              //     context: context,
+              //     builder: (context) => TranslationSheet(
+              //         word: link.url.toString(),
+              //         nextModule: arguments['nextModule'],
+              //         currentIndex: currentIndex));
+              // if (link.url != null) {
+              //   navigateToUrl(link.url!);
+              // } else if (link.dest != null) {
+              //   controller.goToDest(link.dest);
+              // }
+            },
+          ),
+          // enableKeyboardNavigation: false,
+          // scaleEnabled: false,
+          // panEnabled: false,
           margin: 0,
           backgroundColor: Colors.white,
-          pageDropShadow: BoxShadow(
+          pageDropShadow: const BoxShadow(
             color: Colors.transparent,
             blurRadius: 0,
             spreadRadius: 0,
