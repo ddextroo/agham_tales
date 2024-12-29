@@ -19,7 +19,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Future<void> _firstTime() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     // prefs.clear();
-    bool? isFirstTime = prefs.getBool("first_time") ?? false;
+    bool? isFirstTime = prefs.getBool("first_time") ?? true;
 
     if (!isFirstTime) {
       Navigator.popAndPushNamed(context, "/home");
@@ -57,12 +57,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ],
       onDone: () async {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setBool("first_time", true);
+        await prefs.setBool("first_time", false);
         Navigator.popAndPushNamed(context, "/home");
       },
       onSkip: () async {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setBool("first_time", true);
+        await prefs.setBool("first_time", false);
         Navigator.popAndPushNamed(context, "/home");
       },
       showSkipButton: true,

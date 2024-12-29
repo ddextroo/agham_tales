@@ -179,13 +179,13 @@ class BookController {
             partOfSpeech: "Verb",
           ),
           "discover": Dictionary(
-            word: "discover(ed)",
+            word: "discover",
             definition: "Find something new.",
             pronunciation: "/dɪˈskʌv.ər/ or /dɪˈskʌv.ərd/",
             partOfSpeech: "Verb",
           ),
           "discovered": Dictionary(
-            word: "discover(ed)",
+            word: "discovered",
             definition: "Find something new.",
             pronunciation: "/dɪˈskʌv.ər/ or /dɪˈskʌv.ərd/",
             partOfSpeech: "Verb",
@@ -236,7 +236,13 @@ class BookController {
             partOfSpeech: "Verb",
           ),
           "bounced": Dictionary(
-            word: "bounce",
+            word: "bounced",
+            definition: "To hit and come back.",
+            pronunciation: "/baʊns/",
+            partOfSpeech: "Verb",
+          ),
+          "bounces": Dictionary(
+            word: "bounces",
             definition: "To hit and come back.",
             pronunciation: "/baʊns/",
             partOfSpeech: "Verb",
@@ -342,12 +348,11 @@ class BookController {
       return null;
     }
 
-    for (int i = currentBookIndex + 1; i < books.length; i++) {
-      final keyPrefix = 'book_${books[i].title.hashCode}';
-      bool isLocked = prefs.getBool('$keyPrefix.isLocked') ?? true;
-      if (isLocked) {
-        return keyPrefix;
-      }
+    final keyPrefix = 'book_${books[currentBookIndex + 1].title.hashCode}';
+    print(keyPrefix);
+    bool isLocked = prefs.getBool('$keyPrefix.isLocked') ?? true;
+    if (isLocked) {
+      return keyPrefix;
     }
 
     return null;
