@@ -39,6 +39,7 @@ class _StoryBookState extends State<StoryBook> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
+
   Future<void> _loadBookState() async {
     final book = await BookController().loadBookState(_keyPrefix);
     setState(() {
@@ -208,6 +209,10 @@ class _StoryBookState extends State<StoryBook> {
   @override
   void dispose() {
     _saveCurrentPage(_currentPage);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
     super.dispose();
   }
 }

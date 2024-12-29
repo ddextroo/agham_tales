@@ -178,7 +178,13 @@ class BookController {
             pronunciation: "/ˈroʊ.lɪŋ/",
             partOfSpeech: "Verb",
           ),
-          "discover(ed)": Dictionary(
+          "discover": Dictionary(
+            word: "discover(ed)",
+            definition: "Find something new.",
+            pronunciation: "/dɪˈskʌv.ər/ or /dɪˈskʌv.ərd/",
+            partOfSpeech: "Verb",
+          ),
+          "discovered": Dictionary(
             word: "discover(ed)",
             definition: "Find something new.",
             pronunciation: "/dɪˈskʌv.ər/ or /dɪˈskʌv.ərd/",
@@ -224,6 +230,12 @@ class BookController {
             partOfSpeech: "Verb",
           ),
           "bounce": Dictionary(
+            word: "bounce",
+            definition: "To hit and come back.",
+            pronunciation: "/baʊns/",
+            partOfSpeech: "Verb",
+          ),
+          "bounced": Dictionary(
             word: "bounce",
             definition: "To hit and come back.",
             pronunciation: "/baʊns/",
