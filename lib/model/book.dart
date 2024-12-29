@@ -1,3 +1,5 @@
+import 'package:agham_tales/model/dictionary.dart';
+
 class Book {
   final String imageUrl;
   final String pdfPath;
@@ -7,6 +9,7 @@ class Book {
   final int totalPages;
   int? quizScore;
   final int totalQuizScore;
+  final Map<String, Dictionary> glossary;
 
   Book({
     required this.imageUrl,
@@ -17,5 +20,6 @@ class Book {
     required this.totalPages,
     this.quizScore,
     required this.totalQuizScore,
+    required this.glossary,
   });
 }

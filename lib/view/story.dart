@@ -1,3 +1,4 @@
+import 'package:agham_tales/utils/url_prefix_remove.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdfrx/pdfrx.dart';
@@ -24,6 +25,7 @@ class _StoryBookState extends State<StoryBook> {
 
   // Define the key prefix based on the book title's hashCode
   late String _keyPrefix;
+  String? nextBook = "";
 
   @override
   void initState() {
@@ -43,6 +45,7 @@ class _StoryBookState extends State<StoryBook> {
       _currentPage = book.currentPage!;
       _totalPages = book.totalPages;
     });
+    nextBook = await BookController().getNextBookKeyPrefix(_keyPrefix);
 
     if (_controller.isReady) {
       _controller.goToPage(pageNumber: _currentPage);
@@ -54,7 +57,7 @@ class _StoryBookState extends State<StoryBook> {
   }
 
   Future<void> _unlockNextBook() async {
-    await BookController().unlockNextBook(_keyPrefix);
+    await BookController().unlockNextBook(nextBook!);
   }
 
   void goToPage(int page) {
@@ -73,19 +76,48 @@ class _StoryBookState extends State<StoryBook> {
       print("PDF is not ready yet.");
     }
   }
-  void showDictionaryDialog(BuildContext context, String word) {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: DictionaryDialog(
-          word: word,
-          pronunciation: "/lēf/",
-          partOfSpeech: "noun",
-          definition: "Small green parts of a plant",
+
+  void showDictionaryDialog(BuildContext context, String word) async {
+    final prefs = await SharedPreferences.getInstance();
+    final book = await BookController().loadBookState(_keyPrefix);
+    word = cleanUrl(word);
+
+    // Retrieve the glossary for the book
+    final glossary = book.glossary;
+    // print(book.pdfPath);
+
+    // Search for the word in the glossary
+    if (glossary.containsKey(word)) {
+      final dictionary = glossary[word]!;
+
+      // Show the dialog with the word's details
+      showDialog(
+        context: context,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: DictionaryDialog(
+            word: dictionary.word,
+            pronunciation: dictionary.pronunciation,
+            partOfSpeech: dictionary.partOfSpeech,
+            definition: dictionary.definition,
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      // Optionally handle the case where the word isn't found in the glossary
+      showDialog(
+        context: context,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: DictionaryDialog(
+            word: word,
+            pronunciation: "Not found",
+            partOfSpeech: "N/A",
+            definition: "No definition available.",
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -98,7 +130,7 @@ class _StoryBookState extends State<StoryBook> {
           linkHandlerParams: PdfLinkHandlerParams(
             linkColor: const Color(0x00000000),
             onLinkTap: (link) {
-              showDictionaryDialog(context, "Leaf");
+              showDictionaryDialog(context, link.url.toString());
               // showShadSheet(
               //     side: ShadSheetSide.bottom,
               //     context: context,
@@ -113,9 +145,9 @@ class _StoryBookState extends State<StoryBook> {
               // }
             },
           ),
-          // enableKeyboardNavigation: false,
-          // scaleEnabled: false,
-          // panEnabled: false,
+          enableKeyboardNavigation: false,
+          scaleEnabled: false,
+          panEnabled: false,
           margin: 0,
           backgroundColor: Colors.white,
           pageDropShadow: const BoxShadow(
