@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -89,6 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         currentPage: (book.currentPage ?? 0),
                         pdfPath: book.pdfPath,
                         totalQuizScore: book.totalQuizScore,
+                        quizzes: book.quizzes,
+                        audios: book.audios,
                       );
                     }).toList(),
                   ),

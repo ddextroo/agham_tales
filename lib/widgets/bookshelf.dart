@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/quiz.dart';
+import '../model/story_audio.dart';
+
 class BookCover extends StatefulWidget {
   final String imageUrl;
   final String title;
@@ -12,6 +15,8 @@ class BookCover extends StatefulWidget {
   final String pdfPath;
   final int? quizScore;
   final int totalQuizScore;
+  final List<Quiz> quizzes;
+  final StoryAudio audios;
 
   const BookCover({
     super.key,
@@ -24,6 +29,8 @@ class BookCover extends StatefulWidget {
     required this.pdfPath,
     this.quizScore,
     required this.totalQuizScore,
+    required this.quizzes,
+    required this.audios,
   });
 
   @override
@@ -50,9 +57,9 @@ class _BookCoverState extends State<BookCover> {
   // }
 
   void _navigateToNewPage() {
-    if (!_isLocked) {
       Navigator.popAndPushNamed(context, "/story",
           arguments: {"book": widget.pdfPath, "title": widget.title});
+    if (!_isLocked) {
     }
   }
 

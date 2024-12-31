@@ -1,3 +1,4 @@
+import 'package:agham_tales/view/before_quiz.dart';
 import 'package:agham_tales/view/home.dart';
 import 'package:agham_tales/view/onboarding.dart';
 import 'package:agham_tales/view/splash.dart';
@@ -45,6 +46,14 @@ class MyApp extends StatelessWidget {
           final title = args?['title'] ?? '';
           return MaterialPageRoute(
             builder: (context) => StoryBook(book: bookPath, title: title,),
+          );
+        }
+        if (settings.name == '/before_quiz') {
+          final args = settings.arguments as Map<String, dynamic>?;
+          final bookPath = args?['book'] ?? '';
+          final title = args?['title'] ?? '';
+          return MaterialPageRoute(
+            builder: (context) => BeforeQuizScreen(book: bookPath, title: title,),
           );
         }
         return null; // If no route matches, return null

@@ -1,4 +1,6 @@
 import 'package:agham_tales/model/dictionary.dart';
+import 'package:agham_tales/model/quiz.dart';
+import 'package:agham_tales/model/story_audio.dart';
 
 class Book {
   final String imageUrl;
@@ -10,6 +12,8 @@ class Book {
   int? quizScore;
   final int totalQuizScore;
   final Map<String, Dictionary> glossary;
+  final List<Quiz> quizzes;
+  final StoryAudio audios;
 
   Book({
     required this.imageUrl,
@@ -21,5 +25,7 @@ class Book {
     this.quizScore,
     required this.totalQuizScore,
     required this.glossary,
+    required this.quizzes,
+    required this.audios,
   });
 }

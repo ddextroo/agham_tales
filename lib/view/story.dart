@@ -1,6 +1,8 @@
 import 'package:agham_tales/utils/url_prefix_remove.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:pdfrx/pdfrx.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,38 +29,31 @@ class _StoryBookState extends State<StoryBook> {
   late String _keyPrefix;
   String? nextBook = "";
 
-  @override
-  void initState() {
-    super.initState();
-    _keyPrefix = 'book_${widget.title.hashCode}';
-    _loadBookState();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-  }
+  late AudioPlayer _ambientPlayer;
+  late AudioPlayer _storyPlayer;
+  bool _isAmbientPlaying = true;
+  bool _isStoryPlaying = true;
 
-
-  Future<void> _loadBookState() async {
+  Future<void> _initAudioPlayers() async {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.speech());
     final book = await BookController().loadBookState(_keyPrefix);
-    setState(() {
-      _currentPage = book.currentPage!;
-      _totalPages = book.totalPages;
-    });
-    nextBook = await BookController().getNextBookKeyPrefix(_keyPrefix);
+    await AudioPlayer.clearAssetCache();
 
-    if (_controller.isReady) {
-      _controller.goToPage(pageNumber: _currentPage);
+    _ambientPlayer = AudioPlayer();
+    _storyPlayer = AudioPlayer();
+
+    // Load and loop ambient audio
+    await _ambientPlayer.setAsset(book.audios.ambient ?? "");
+    await _ambientPlayer.play();
+    await _ambientPlayer.setLoopMode(LoopMode.one);
+    await _ambientPlayer.setVolume(1.0);
+    await _storyPlayer.setVolume(1.0);
+
+    if (book.audios.audioPerPage.isNotEmpty) {
+      await _storyPlayer.setAsset(book.audios.audioPerPage[0]);
+      await _storyPlayer.play();
     }
-  }
-
-  Future<void> _saveCurrentPage(int page) async {
-    await BookController().saveCurrentPage(_keyPrefix, page);
-  }
-
-  Future<void> _unlockNextBook() async {
-    await BookController().unlockNextBook(nextBook!);
   }
 
   void goToPage(int page) {
@@ -69,13 +64,55 @@ class _StoryBookState extends State<StoryBook> {
         _currentPage = page;
       });
       _saveCurrentPage(page);
+      _changeStoryAudio(page);
 
       if (_currentPage == _controller.pageCount) {
-        _unlockNextBook();
+        Navigator.popAndPushNamed(context, "/before_quiz",
+            arguments: {"book": widget.book, "title": widget.title});
       }
     } else {
       print("PDF is not ready yet.");
     }
+  }
+
+  Future<void> _changeStoryAudio(int page) async {
+    final book = await BookController().loadBookState(_keyPrefix);
+    if (book.audios.audioPerPage.length >= page) {
+      await _storyPlayer.stop();
+      await _storyPlayer.setAsset(book.audios.audioPerPage[page - 1]);
+      if (_isStoryPlaying) {
+        await _storyPlayer.play();
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _keyPrefix = 'book_${widget.title.hashCode}';
+    _loadBookState();
+    _initAudioPlayers();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
+  Future<void> _loadBookState() async {
+    final book = await BookController().loadBookState(_keyPrefix);
+    setState(() {
+      _totalPages = book.totalPages;
+    });
+    nextBook = await BookController().getNextBookKeyPrefix(_keyPrefix);
+  }
+
+  Future<void> _saveCurrentPage(int page) async {
+    await BookController().saveCurrentPage(_keyPrefix, page);
+  }
+
+  Future<void> _unlockNextBook() async {
+    await BookController().unlockNextBook(nextBook!);
   }
 
   void showDictionaryDialog(BuildContext context, String word) async {
@@ -183,17 +220,39 @@ class _StoryBookState extends State<StoryBook> {
           FloatingActionButton(
             heroTag: 'next',
             onPressed: () {
-              if (_currentPage < _controller.pageCount) {
+              if (_currentPage <= _controller.pageCount) {
                 goToPage(_currentPage + 1);
               }
             },
             child: const Icon(LucideIcons.arrowRight),
           ),
           const SizedBox(width: 16),
+          const SizedBox(width: 16),
           FloatingActionButton(
-            heroTag: 'audio',
-            onPressed: () => goToPage(_currentPage + 1),
-            child: const Icon(LucideIcons.music),
+            heroTag: 'ambient',
+            onPressed: () {
+              setState(() {
+                _isAmbientPlaying = !_isAmbientPlaying;
+                _isAmbientPlaying
+                    ? _ambientPlayer.play()
+                    : _ambientPlayer.pause();
+              });
+            },
+            child: Icon(
+                _isAmbientPlaying ? LucideIcons.volume2 : LucideIcons.volumeX),
+          ),
+          const SizedBox(width: 16),
+          FloatingActionButton(
+            heroTag: 'story',
+            onPressed: () {
+              setState(() {
+                _isStoryPlaying = !_isStoryPlaying;
+                _isStoryPlaying ? _storyPlayer.play() : _storyPlayer.pause();
+              });
+            },
+            child: Icon(_isStoryPlaying
+                ? LucideIcons.pauseCircle
+                : LucideIcons.playCircle),
           ),
           const SizedBox(width: 16),
           FloatingActionButton(
@@ -201,6 +260,20 @@ class _StoryBookState extends State<StoryBook> {
             onPressed: () => goToPage(1),
             child: const Icon(LucideIcons.repeat),
           ),
+          const SizedBox(width: 16),
+          FloatingActionButton(
+            heroTag: 'savedPage',
+            onPressed: () async {
+              final book = await BookController().loadBookState(_keyPrefix);
+              setState(() {
+                _currentPage = book.currentPage!;
+              });
+
+              goToPage(_currentPage);
+            },
+            child: const Icon(LucideIcons.bookmark),
+          ),
+          const SizedBox(width: 16),
         ],
       ),
     );
@@ -209,6 +282,8 @@ class _StoryBookState extends State<StoryBook> {
   @override
   void dispose() {
     _saveCurrentPage(_currentPage);
+    _ambientPlayer.dispose();
+    _storyPlayer.dispose();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,

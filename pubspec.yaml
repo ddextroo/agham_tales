@@ -42,6 +42,12 @@ dependencies:
   pdfrx: ^1.0.94
   lucide_icons: ^0.257.0
   flutter_tts: ^4.2.1
+  lottie: ^3.2.0
+  flutter_animate: ^4.5.2
+  animated_text_kit: ^4.2.2
+  audioplayers: ^6.1.0
+  just_audio: ^0.9.42
+  audio_session: ^0.1.23
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +76,9 @@ flutter:
     - assets/images/
     - assets/images/cover_books/
     - assets/stories/
+    - assets/audios/book2/
+    - assets/audios/book3/
+    - assets/audios/book4/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
