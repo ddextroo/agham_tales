@@ -15,7 +15,7 @@ class BookController {
         pdfPath: "assets/stories/bennie.pdf",
         title: "Bennie’s Forcestatic Adventure",
         totalPages: 13,
-        totalQuizScore: 10,
+        totalQuizScore: 5,
         glossary: {
           "exploring": Dictionary(
             word: "exploring",
@@ -80,56 +80,60 @@ class BookController {
         },
         quizzes: [
           Quiz(
-              question: "What kind of force is Bennie using to move the ball?",
-              choices: {"A": "Push", "B": "Pull"},
-              correctFeedback:
-                  "🎉 That’s right! Bennie is using push force to move the ball!",
-              incorrectFeedback:
-                  "🚫 Not quite! Bennie is pushing, not pulling the ball.",
-              correctAnswer: ['A']),
-          Quiz(
-              question:
-                  "Why is it easier for Sally to push the acorn than Bennie to push the ball?",
+              question: "What did Bennie learn from trying to move the big ball?",
               choices: {
-                "A": "The ball is lighter than the acorn.",
-                "B": "The ball is heavier than the acorn."
+                "A": "Balls can only roll downhill.",
+                "B": "It takes force to make something move.",
+                "C": "Small things are impossible to move.",
+                "D": "You can only pull things, not push them."
               },
-              correctFeedback:
-                  "🎉 Good job! Heavier objects need more force to move.",
-              incorrectFeedback:
-                  "🚫 Oops! The ball is heavier, so it’s harder to push.",
-              correctAnswer: ['B']),
+              correctFeedback: "🎉 Correct! Bennie learned that it takes force to make something move.",
+              incorrectFeedback: "🚫 Not quite! Bennie discovered that force is needed to make objects move.",
+              correctAnswer: 'B'),
           Quiz(
-              question: "What kind of force is Rico using to move the cart?",
-              choices: {"A": "Push", "B": "Pull"},
-              correctFeedback:
-                  "🎉 Great! Rico is pulling the cart using pull force!",
-              incorrectFeedback:
-                  "🚫 Not quite! Rico is using pull force, not push force.",
-              correctAnswer: ['B']),
-          Quiz(
-              question:
-                  "Why was the ball easier to move when everyone helped push?",
+              question: "What kind of force was Bennie using when he tried to move the big ball?",
               choices: {
-                "A": "They used more force together.",
-                "B": "The ball got lighter."
+                "A": "Pulling",
+                "B": "Jumping",
+                "C": "Pushing",
+                "D": "Throwing"
               },
-              correctFeedback:
-                  "🎉 You got it! More force makes it easier to move heavy things.",
-              incorrectFeedback:
-                  "🚫 Almost! The ball didn’t get lighter—they just used more force together.",
-              correctAnswer: ['A']),
+              correctFeedback: "🎉 Great! Bennie was using pushing force to try and move the ball.",
+              incorrectFeedback: "🚫 Almost! Bennie was pushing the ball, not pulling or throwing it.",
+              correctAnswer: 'C'),
           Quiz(
-              question: "Why did the ball stop moving?",
+              question: "Why was it easier for Sally to move the acorn compared to Bennie moving the big ball?",
               choices: {
-                "A": "Tim used force to stop it.",
-                "B": "It stopped on its own."
+                "A": "Sally is stronger than Bennie.",
+                "B": "The acorn is smaller and lighter than the ball.",
+                "C": "Acorns are made to roll.",
+                "D": "Sally was using magic."
               },
-              correctFeedback:
-                  "🎉 Correct! Something, like Tim or the ground, must apply force to stop motion.",
-              incorrectFeedback:
-                  "🚫 Not quite! The ball stops because something applies force to it.",
-              correctAnswer: ['A']),
+              correctFeedback: "🎉 Exactly! Smaller and lighter objects require less force to move.",
+              incorrectFeedback: "🚫 Nope! Sally was able to move the acorn easily because it's lighter and smaller than the ball.",
+              correctAnswer: 'B'),
+          Quiz(
+              question: "What happens when something starts moving, according to Sally?",
+              choices: {
+                "A": "It stops immediately.",
+                "B": "It keeps moving until something stops it.",
+                "C": "It goes uphill by itself.",
+                "D": "It disappears into the air."
+              },
+              correctFeedback: "🎉 Spot on! Objects in motion stay in motion until something stops them.",
+              incorrectFeedback: "🚫 Not quite! Sally explained that objects move until a force stops them.",
+              correctAnswer: 'B'),
+          Quiz(
+              question: "What did Tim the turtle say is the key to learning about force?",
+              choices: {
+                "A": "Pushing and pulling every day.",
+                "B": "Reading books and staying curious.",
+                "C": "Asking other animals to help.",
+                "D": "Resting and watching from a distance."
+              },
+              correctFeedback: "🎉 That’s correct! Curiosity and learning are the keys to understanding force.",
+              incorrectFeedback: "🚫 Close! Tim emphasized staying curious and learning to understand force.",
+              correctAnswer: 'B'),
         ],
         audios: StoryAudio(introAudio: "", audioPerPage: []),
       ),
@@ -192,74 +196,60 @@ class BookController {
         },
         quizzes: [
           Quiz(
-              scene:
-                  "Players are shown three scenes: a ball falling, a leaf drifting down, and a kite flying.",
-              question: "Tap all the objects that are affected by gravity.",
-              choices: {"A": "Ball", "B": "Leaf", "C": "Kite"},
-              correctFeedback:
-                  "🎉 Great! Gravity pulls the ball and leaf to the ground!",
-              incorrectFeedback:
-                  "🚫 Hmm, remember, gravity pulls things down. Try again!",
-              correctAnswer: ['A', 'B']),
-          Quiz(
-              scene:
-                  "Players see Lily pushing a swing, pulling a wagon, and kicking a ball.",
-              question: "Tap the correct label (Push or Pull) for each action.",
+              question: "What does Lily do to make the swing go higher?",
               choices: {
-                "A": "Swing: Push",
-                "B": "Wagon: Pull",
-                "C": "Ball: Push"
+                "A": "She pulls the swing with her hands.",
+                "B": "She pumps her legs to create force.",
+                "C": "She waits for the wind to push her.",
+                "D": "She jumps off the swing."
               },
-              correctFeedback:
-                  "🎉 Well done! The objects move as expected, thanks to the right labels!",
-              incorrectFeedback:
-                  "🚫 Not quite! Think about whether Lily is pushing something away or pulling it closer.",
-              correctAnswer: ['A']),
+              correctFeedback: "🎉 Great! Pumping her legs creates the force needed to make the swing go higher.",
+              incorrectFeedback: "🚫 Not quite! She uses her legs to generate force, not her hands or the wind.",
+              correctAnswer: 'B'),
           Quiz(
-              scene:
-                  "Players drag action words to match animated objects on the screen.",
-              question:
-                  "Match the motion! Drag the correct labels to the objects.",
+              question: "What is the force called that pulls Lily back down to the ground?",
               choices: {
-                "A": "Swinging → Swing",
-                "B": "Falling → Leaf",
-                "C": "Rolling → Ball",
-                "D": "Spinning → Top"
+                "A": "Gravity",
+                "B": "Wind",
+                "C": "Magnetism",
+                "D": "Friction"
               },
-              correctFeedback:
-                  "🎉 Excellent! The matches show how objects move.",
-              incorrectFeedback:
-                  "🚫 Oops! Look closely at how the object moves and try again!",
-              correctAnswer: ['A']),
+              correctFeedback: "🎉 Correct! Gravity is the force that pulls objects down to Earth.",
+              incorrectFeedback: "🚫 Oops! Remember, gravity is what makes objects fall.",
+              correctAnswer: 'A'),
           Quiz(
-              scene: "A short multiple-choice quiz about gravity.",
-              question:
-                  "What force pulls you back to the ground when you jump?",
-              choices: {"A": "Gravity", "B": "Wind", "C": "Push"},
-              correctFeedback: "🎉 You got it! Gravity pulls us down to Earth.",
-              incorrectFeedback:
-                  "🚫 Uh-oh! Remember, gravity is the force pulling objects down.",
-              correctAnswer: ['A']),
-          Quiz(
-              scene: "A short multiple-choice quiz about gravity.",
-              question: "Which way does gravity pull objects?",
-              choices: {"A": "Up", "B": "Down", "C": "Sideways"},
-              correctFeedback: "🎉 Correct! Gravity always pulls objects down.",
-              incorrectFeedback:
-                  "🚫 Not quite! Gravity works in a downward direction.",
-              correctAnswer: ['A']),
-          Quiz(
-              scene: "Players arrange items to create a force chain reaction.",
-              question: "Arrange the items to make a force chain reaction!",
+              question: "What happens when Lily stops pumping her legs while swinging?",
               choices: {
-                "A": "Ball → Ramp → Dominoes → Swing",
-                "B": "Swing → Dominoes → Ramp → Ball",
-                "C": "Dominoes → Ball → Swing → Ramp"
+                "A": "The swing stays in the air.",
+                "B": "The swing keeps going higher.",
+                "C": "The swing slows down and comes back down.",
+                "D": "The swing spins in circles."
               },
-              correctFeedback: "🎉 Awesome! That’s how force works!",
-              incorrectFeedback:
-                  "🚫 Hmm, try putting the ramp first for the ball to roll!",
-              correctAnswer: ['A'])
+              correctFeedback: "🎉 Well done! Without pumping, the swing slows and eventually stops.",
+              incorrectFeedback: "🚫 Almost! The swing slows down because no force is added to keep it moving.",
+              correctAnswer: 'C'),
+          Quiz(
+              question: "What does Lily's dad use as an example of gravity at work?",
+              choices: {
+                "A": "A kite flying in the sky",
+                "B": "A leaf and a ball falling to the ground",
+                "C": "A bird flying in the air",
+                "D": "The wind blowing through the trees"
+              },
+              correctFeedback: "🎉 Excellent! A leaf and a ball show how gravity pulls objects down.",
+              incorrectFeedback: "🚫 Not quite! Gravity is what pulls the leaf and ball to the ground.",
+              correctAnswer: 'B'),
+          Quiz(
+              question: "What two forces are mentioned in the story that make Lily move on the swing?",
+              choices: {
+                "A": "Wind and gravity",
+                "B": "Gravity and her force from pumping her legs",
+                "C": "Magnetism and gravity",
+                "D": "Friction and the wind"
+              },
+              correctFeedback: "🎉 Good job! Gravity and Lily’s effort make the swing move.",
+              incorrectFeedback: "🚫 Oops! Think about how Lily creates motion and what pulls her back down.",
+              correctAnswer: 'B'),
         ],
         audios: StoryAudio(
             ambient: "assets/audios/book2/ambient.mp3",
@@ -279,7 +269,7 @@ class BookController {
         pdfPath: "assets/stories/wonders.pdf",
         title: "The Day of Moving Wonders",
         totalPages: 9,
-        totalQuizScore: 20,
+        totalQuizScore: 5,
         glossary: {
           "swirled": Dictionary(
             word: "swirled",
@@ -335,43 +325,42 @@ class BookController {
               question: "What motion is the paper plane showing?",
               choices: {"A": "Flying", "B": "Rolling", "C": "Spinning"},
               correctFeedback:
-                  "🎉 The paper plane glides offscreen with a 'Whoosh!' sound and a glowing trail.",
+              "🎉 The paper plane glides offscreen with a 'Whoosh!' sound and a glowing trail.",
               incorrectFeedback:
-                  "🚫 The paper plane wobbles and falls to the ground with a funny 'thud' sound. Oops! Paper planes fly through the air. Try again!",
-              correctAnswer: ['A']),
+              "🚫 The paper plane wobbles and falls to the ground with a funny 'thud' sound. Oops! Paper planes fly through the air. Try again!",
+              correctAnswer: 'A'),
           Quiz(
               question: "Help Lily find her toy cart!",
               choices: {"A": "Ball", "B": "Spinning Top", "C": "Toy Cart"},
               correctFeedback:
-                  "🎉 The toy cart rolls to Lily with a cheerful sound, and Lily waves.",
+              "🎉 The toy cart rolls to Lily with a cheerful sound, and Lily waves.",
               incorrectFeedback:
-                  "🚫 If the wrong object is dragged, it wobbles and bounces back to its original spot. Hmm, the cart rolls. Try again!",
-              correctAnswer: ['C']),
+              "🚫 If the wrong object is dragged, it wobbles and bounces back to its original spot. Hmm, the cart rolls. Try again!",
+              correctAnswer: 'C'),
           Quiz(
               question: "What motion does a swing show?",
               choices: {"A": "Back-and-Forth", "B": "Spinning", "C": "Flying"},
               correctFeedback:
-                  "🎉 The swing moves faster with a fun creaking sound, and cheerful kids appear in the background.",
+              "🎉 The swing moves faster with a fun creaking sound, and cheerful kids appear in the background.",
               incorrectFeedback:
-                  "🚫 The swing slows down and stops briefly. Not quite! Swings go back and forth. Try again!",
-              correctAnswer: ['A']),
+              "🚫 The swing slows down and stops briefly. Not quite! Swings go back and forth. Try again!",
+              correctAnswer: 'A'),
           Quiz(
               question: "Zara is curious: What makes the spinning top move?",
               choices: {"A": "Push", "B": "Wind", "C": "Rolling"},
               correctFeedback:
-                  "🎉 The top glows and spins faster, with sparkles around it.",
+              "🎉 The top glows and spins faster, with sparkles around it.",
               incorrectFeedback:
-                  "🚫 The top slows down and tilts slightly. Hmm, think about what made the top start moving. Try again!",
-              correctAnswer: ['A']),
+              "🚫 The top slows down and tilts slightly. Hmm, think about what made the top start moving. Try again!",
+              correctAnswer: 'A'),
           Quiz(
-              question:
-                  "Milo wonders: Which of these objects shows rolling motion?",
+              question: "Milo wonders: Which of these objects shows rolling motion?",
               choices: {"A": "Ball", "B": "Kite", "C": "Spinning Top"},
               correctFeedback:
-                  "🎉 The ball rolls offscreen with a 'Ta-da!' sound, and a mini fireworks animation appears.",
+              "🎉 The ball rolls offscreen with a 'Ta-da!' sound, and a mini fireworks animation appears.",
               incorrectFeedback:
-                  "🚫 The incorrect object wiggles and stays in place. Look for something that rolls. Try again!",
-              correctAnswer: ['A']),
+              "🚫 The incorrect object wiggles and stays in place. Look for something that rolls. Try again!",
+              correctAnswer: 'A'),
         ],
         audios: StoryAudio(
             ambient: "assets/audios/book2/ambient.mp3",
@@ -393,7 +382,7 @@ class BookController {
         pdfPath: "assets/stories/mystical.pdf",
         title: "Leo and The Mystical Cave",
         totalPages: 10,
-        totalQuizScore: 20,
+        totalQuizScore: 5,
         glossary: {
           "chilly": Dictionary(
             word: "chilly",
@@ -469,7 +458,7 @@ class BookController {
                   "🎉 Correct! The cave doesn’t get sunlight, so it stays naturally cool.",
               incorrectFeedback:
                   "🚫 Not quite! The cave stays cool because it doesn’t get sunlight.",
-              correctAnswer: ['B']),
+              correctAnswer: 'B'),
           Quiz(
               question: "Why does the sound echo in the cave?",
               choices: {
@@ -482,7 +471,7 @@ class BookController {
                   "🎉 That’s right! The sound bounces off the cave walls and comes back as an echo.",
               incorrectFeedback:
                   "🚫 Nope! Echoes happen because sound bounces off the cave walls and comes back.",
-              correctAnswer: ['B']),
+              correctAnswer: 'B'),
           Quiz(
               question: "What helps Leo see in the dark cave?",
               choices: {
@@ -495,7 +484,7 @@ class BookController {
                   "🎉 Correct! The light from the flashlight helps Leo see in the dark cave.",
               incorrectFeedback:
                   "🚫 Not quite! It’s the light from the flashlight that helps Leo see.",
-              correctAnswer: ['B']),
+              correctAnswer: 'B'),
           Quiz(
               question: "What two kinds of energy does a candle have?",
               choices: {
@@ -508,7 +497,7 @@ class BookController {
                   "🎉 You got it! A candle produces light energy and heat energy.",
               incorrectFeedback:
                   "🚫 Nope! Candles give off light energy and heat energy.",
-              correctAnswer: ['A']),
+              correctAnswer: 'A'),
           Quiz(
               question: "What did Leo learn by the end of the story?",
               choices: {
@@ -522,7 +511,7 @@ class BookController {
                   "🎉 Correct! Leo learned that different kinds of energy, like heat, light, and sound, can be found everywhere.",
               incorrectFeedback:
                   "🚫 Not quite! Leo discovered that energy is all around us in different forms like heat, light, and sound.",
-              correctAnswer: ['B']),
+              correctAnswer: 'B'),
         ],
         audios: StoryAudio(
             ambient: "assets/audios/book2/ambient.mp3",
@@ -564,13 +553,15 @@ class BookController {
             .toList();
         await prefs.setStringList('$keyPrefix.glossary', glossaryData);
 
-        // Save quizzes data
-        List<String> quizzesData = defaultBooks[i]
-            .quizzes
-            .map((quiz) =>
-        "${quiz.scene}|${quiz.question}|${quiz.choices.toString()}|${quiz.correctFeedback}|${quiz.incorrectFeedback}|${quiz.correctAnswer.join(',')}")
-            .toList();
+
+        List<String> quizzesData = defaultBooks[i].quizzes.map((quiz) {
+          final choices = quiz.choices.entries
+              .map((entry) => "${entry.key}:${entry.value}")
+              .join(";");
+          return "${quiz.question}|$choices|${quiz.correctFeedback}|${quiz.incorrectFeedback}|${quiz.correctAnswer}";
+        }).toList();
         await prefs.setStringList('$keyPrefix.quizzes', quizzesData);
+
 
         // Save audio data
         await prefs.setString('$keyPrefix.audio.ambientAudio', defaultBooks[i].audios.ambient ?? "");
@@ -607,32 +598,22 @@ class BookController {
     }
 
     // Load quizzes
-    List<String> quizData = prefs.getStringList('$keyPrefix.quizzes') ?? [];
-    List<Quiz> quizzes = quizData.map((quizEntry) {
-      final parts = quizEntry.split('|');
-      if (parts.length >= 6) {
-        final scene = parts[0];
-        final question = parts[1];
-        final choices = Map<String, String>.fromEntries(
-          parts[2].split(';').map((choice) {
-            final choiceParts = choice.split(':');
-            return MapEntry(choiceParts[0], choiceParts[1]);
-          }),
-        );
-        final correctFeedback = parts[3];
-        final incorrectFeedback = parts[4];
-        final correctAnswer = parts[5].split(',');
-        return Quiz(
-          scene: scene,
-          question: question,
-          choices: choices,
-          correctFeedback: correctFeedback,
-          incorrectFeedback: incorrectFeedback,
-          correctAnswer: correctAnswer,
-        );
-      }
-      return null;
-    }).whereType<Quiz>().toList();
+    List<String> quizzesData = prefs.getStringList('$keyPrefix.quizzes') ?? [];
+    List<Quiz> quizzes = [];
+    for (var quizString in quizzesData) {
+      var parts = quizString.split('|');
+      var choices = Map.fromEntries(parts[1].split(';').map((s) {
+        var keyValue = s.split(':');
+        return MapEntry(keyValue[0], keyValue[1]);
+      }));
+      quizzes.add(Quiz(
+        question: parts[0],
+        choices: choices,
+        correctFeedback: parts[2],
+        incorrectFeedback: parts[3],
+        correctAnswer: parts[4],
+      ));
+    }
 
     // Load audio data
     String? ambient = prefs.getString('$keyPrefix.audio.ambientAudio');
@@ -671,6 +652,24 @@ class BookController {
     await prefs.setBool('$keyPrefix.isLocked', false);
     print("Next book unlocked for $keyPrefix!");
   }
+
+  Future<void> saveQuizScore(String keyPrefix, int score) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // Save the quiz score using the keyPrefix
+    await prefs.setInt('$keyPrefix.quizScore', score);
+    print("Quiz score saved for $keyPrefix: $score");
+  }
+
+  Future<int?> getQuizScore(String keyPrefix) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // Retrieve the quiz score using the keyPrefix
+    int? score = prefs.getInt('$keyPrefix.quizScore');
+    print("Quiz score for $keyPrefix: $score");
+    return score;
+  }
+
 
   Future<String?> getNextBookKeyPrefix(String currentKeyPrefix) async {
     final prefs = await SharedPreferences.getInstance();

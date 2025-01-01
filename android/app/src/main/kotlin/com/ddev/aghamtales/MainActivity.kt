@@ -1,4 +1,4 @@
-package com.example.agham_tales
+package com.ddev.aghamtales
 
 import io.flutter.embedding.android.FlutterActivity
 

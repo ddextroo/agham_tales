@@ -16,6 +16,9 @@ class BeforeQuizScreen extends StatefulWidget {
 class _BeforeQuizScreenState extends State<BeforeQuizScreen> {
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(16),
@@ -31,15 +34,14 @@ class _BeforeQuizScreenState extends State<BeforeQuizScreen> {
           ),
         ),
         child: SafeArea(
-          child: Center(
+          child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Spacer(),
+                const SizedBox(height: 16),
                 Text(
                   "Welcome to",
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: screenHeight * 0.03,
                     fontWeight: FontWeight.bold,
                     color: Colors.blue.shade800,
                   ),
@@ -48,7 +50,7 @@ class _BeforeQuizScreenState extends State<BeforeQuizScreen> {
                 Text(
                   widget.title,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: screenHeight * 0.025,
                     fontWeight: FontWeight.bold,
                     color: Colors.blue.shade900,
                     shadows: [
@@ -59,32 +61,41 @@ class _BeforeQuizScreenState extends State<BeforeQuizScreen> {
                       ),
                     ],
                   ),
+                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 30),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      width: 260,
-                      height: 260,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: RadialGradient(
-                          colors: [Colors.blue.shade100, Colors.blue.shade50],
+                Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: screenWidth * 0.2,
+                        height: screenWidth * 0.2,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: RadialGradient(
+                            colors: [
+                              Colors.blue.shade100,
+                              Colors.blue.shade50,
+                            ],
+                          ),
                         ),
+                      ).animate().scale(
+                          duration: 1000.ms, curve: Curves.elasticOut),
+                      Lottie.network(
+                        'https://assets5.lottiefiles.com/packages/lf20_xyadoh9h.json',
+                        width: screenWidth * 0.15,
+                        height: screenWidth * 0.15,
                       ),
-                    ).animate().scale(duration: 1000.ms, curve: Curves.elasticOut),
-                    Lottie.network(
-                      'https://assets5.lottiefiles.com/packages/lf20_xyadoh9h.json',
-                      width: 240,
-                      height: 240,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                const Spacer(),
+                const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: () {
                     // TODO: Navigate to the quiz screen
+                    Navigator.popAndPushNamed(context, "/quiz",
+                        arguments: {"book": widget.book, "title": widget.title});
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,

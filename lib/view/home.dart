@@ -58,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
+              print(snapshot.error);
               return const Center(child: Text('Failed to load books'));
             }
 
@@ -82,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       double progress =
                           (book.currentPage ?? 0) / book.totalPages;
 
+
                       return BookCover(
                         imageUrl: book.imageUrl,
                         title: book.title,
@@ -92,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         pdfPath: book.pdfPath,
                         totalQuizScore: book.totalQuizScore,
                         quizzes: book.quizzes,
+                        quizScore: book.quizScore,
                         audios: book.audios,
                       );
                     }).toList(),

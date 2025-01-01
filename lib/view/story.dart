@@ -32,7 +32,7 @@ class _StoryBookState extends State<StoryBook> {
   late AudioPlayer _ambientPlayer;
   late AudioPlayer _storyPlayer;
   bool _isAmbientPlaying = true;
-  bool _isStoryPlaying = true;
+  bool _isStoryPlaying = false;
 
   Future<void> _initAudioPlayers() async {
     final session = await AudioSession.instance;
@@ -52,7 +52,6 @@ class _StoryBookState extends State<StoryBook> {
 
     if (book.audios.audioPerPage.isNotEmpty) {
       await _storyPlayer.setAsset(book.audios.audioPerPage[0]);
-      await _storyPlayer.play();
     }
   }
 

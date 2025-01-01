@@ -146,8 +146,7 @@ class _BookCoverState extends State<BookCover> {
                         color: Colors.grey[600],
                       ),
                     ),
-                    if (widget.quizScore != null &&
-                        widget.totalQuizScore != null)
+                    if (widget.quizScore != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 4),
                         child: Text(

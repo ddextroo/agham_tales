@@ -48,6 +48,9 @@ dependencies:
   audioplayers: ^6.1.0
   just_audio: ^0.9.42
   audio_session: ^0.1.23
+  rename_app: ^1.6.1
+  change_app_package_name: ^1.4.0
+  flutter_launcher_icons: ^0.14.2
 
 dev_dependencies:
   flutter_test:
