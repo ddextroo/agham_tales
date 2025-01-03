@@ -38,15 +38,17 @@ class _StoryBookState extends State<StoryBook> {
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.speech());
     final book = await BookController().loadBookState(_keyPrefix);
-    await AudioPlayer.clearAssetCache();
+    // await AudioPlayer.clearAssetCache();
 
     _ambientPlayer = AudioPlayer();
     _storyPlayer = AudioPlayer();
 
+    print(book.audios.ambient);
+
     // Load and loop ambient audio
     await _ambientPlayer.setAsset(book.audios.ambient ?? "");
     await _ambientPlayer.play();
-    await _ambientPlayer.setLoopMode(LoopMode.one);
+    await _ambientPlayer.setLoopMode(LoopMode.all);
     await _ambientPlayer.setVolume(1.0);
     await _storyPlayer.setVolume(1.0);
 
@@ -65,7 +67,7 @@ class _StoryBookState extends State<StoryBook> {
       _saveCurrentPage(page);
       _changeStoryAudio(page);
 
-      if (_currentPage == _controller.pageCount) {
+      if (_currentPage > _controller.pageCount) {
         Navigator.popAndPushNamed(context, "/before_quiz",
             arguments: {"book": widget.book, "title": widget.title});
       }
@@ -226,7 +228,6 @@ class _StoryBookState extends State<StoryBook> {
             child: const Icon(LucideIcons.arrowRight),
           ),
           const SizedBox(width: 16),
-          const SizedBox(width: 16),
           FloatingActionButton(
             heroTag: 'ambient',
             onPressed: () {
@@ -283,10 +284,10 @@ class _StoryBookState extends State<StoryBook> {
     _saveCurrentPage(_currentPage);
     _ambientPlayer.dispose();
     _storyPlayer.dispose();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
-    ]);
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.portraitDown,
+    //   DeviceOrientation.portraitUp,
+    // ]);
     super.dispose();
   }
 }

@@ -14,7 +14,7 @@ class BookController {
         imageUrl: "assets/images/cover_books/bennie.png",
         pdfPath: "assets/stories/bennie.pdf",
         title: "Bennie’s Forcestatic Adventure",
-        totalPages: 13,
+        totalPages: 14,
         totalQuizScore: 5,
         glossary: {
           "exploring": Dictionary(
@@ -135,13 +135,30 @@ class BookController {
               incorrectFeedback: "🚫 Close! Tim emphasized staying curious and learning to understand force.",
               correctAnswer: 'B'),
         ],
-        audios: StoryAudio(introAudio: "", audioPerPage: []),
+        audios: StoryAudio(
+            ambient: "assets/audios/book2/ambient.mp3",
+            introAudio: "assets/audios/book1/intro.mp3",
+            audioPerPage: [
+              "assets/audios/book1/intro.mp3",
+              "assets/audios/book1/Vocal_Page1.mp3",
+              "assets/audios/book1/Vocal_Page2.mp3",
+              "assets/audios/book1/Vocal_Page3.mp3",
+              "assets/audios/book1/Vocal_Page4.mp3",
+              "assets/audios/book1/Vocal_Page5.mp3",
+              "assets/audios/book1/Vocal_Page6.mp3",
+              "assets/audios/book1/Vocal_Page7.mp3",
+              "assets/audios/book1/Vocal_Page8.mp3",
+              "assets/audios/book1/Vocal_Page9.mp3",
+              "assets/audios/book1/Vocal_Page10.mp3",
+              "assets/audios/book1/Vocal_Page11.mp3",
+              "assets/audios/book1/Vocal_Page12.mp3",
+            ]),
       ),
       Book(
         imageUrl: "assets/images/cover_books/lily.png",
         pdfPath: "assets/stories/lily.pdf",
         title: "Lily and The Swing",
-        totalPages: 7,
+        totalPages: 8,
         totalQuizScore: 5,
         glossary: {
           "soar": Dictionary(
@@ -268,7 +285,7 @@ class BookController {
         imageUrl: "assets/images/cover_books/wonder.png",
         pdfPath: "assets/stories/wonders.pdf",
         title: "The Day of Moving Wonders",
-        totalPages: 9,
+        totalPages: 10,
         totalQuizScore: 5,
         glossary: {
           "swirled": Dictionary(
@@ -381,7 +398,7 @@ class BookController {
         imageUrl: "assets/images/cover_books/mystical.png",
         pdfPath: "assets/stories/mystical.pdf",
         title: "Leo and The Mystical Cave",
-        totalPages: 10,
+        totalPages: 11,
         totalQuizScore: 5,
         glossary: {
           "chilly": Dictionary(

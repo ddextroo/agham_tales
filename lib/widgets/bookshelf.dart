@@ -57,9 +57,9 @@ class _BookCoverState extends State<BookCover> {
   // }
 
   void _navigateToNewPage() {
+    if (!_isLocked) {
       Navigator.popAndPushNamed(context, "/story",
           arguments: {"book": widget.pdfPath, "title": widget.title});
-    if (!_isLocked) {
     }
   }
 
