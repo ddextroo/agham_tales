@@ -20,7 +20,8 @@ class StoryBook extends StatefulWidget {
   State<StoryBook> createState() => _StoryBookState();
 }
 
-class _StoryBookState extends State<StoryBook> {
+class _StoryBookState extends State<StoryBook>
+    with SingleTickerProviderStateMixin {
   final PdfViewerController _controller = PdfViewerController();
   int _currentPage = 1; // Default to the first page
   int _totalPages = 0; // Total pages in the book
@@ -28,6 +29,10 @@ class _StoryBookState extends State<StoryBook> {
   // Define the key prefix based on the book title's hashCode
   late String _keyPrefix;
   String? nextBook = "";
+
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+  bool _isControlsVisible = true;
 
   late AudioPlayer _ambientPlayer;
   late AudioPlayer _storyPlayer;
@@ -93,11 +98,35 @@ class _StoryBookState extends State<StoryBook> {
     _keyPrefix = 'book_${widget.title.hashCode}';
     _loadBookState();
     _initAudioPlayers();
+
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    );
+
+    // Start with controls visible
+    _animationController.value = 1.0;
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
+  void _toggleControls() {
+    setState(() {
+      _isControlsVisible = !_isControlsVisible;
+      if (_isControlsVisible) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    });
   }
 
   Future<void> _loadBookState() async {
@@ -162,119 +191,175 @@ class _StoryBookState extends State<StoryBook> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PdfViewer.asset(
-        widget.book,
-        controller: _controller,
-        params: PdfViewerParams(
-          linkHandlerParams: PdfLinkHandlerParams(
-            linkColor: const Color(0x00000000),
-            onLinkTap: (link) {
-              showDictionaryDialog(context, link.url.toString());
-              // showShadSheet(
-              //     side: ShadSheetSide.bottom,
-              //     context: context,
-              //     builder: (context) => TranslationSheet(
-              //         word: link.url.toString(),
-              //         nextModule: arguments['nextModule'],
-              //         currentIndex: currentIndex));
-              // if (link.url != null) {
-              //   navigateToUrl(link.url!);
-              // } else if (link.dest != null) {
-              //   controller.goToDest(link.dest);
-              // }
-            },
+      body: Stack(
+        children: [
+          PdfViewer.asset(
+            widget.book,
+            controller: _controller,
+            params: PdfViewerParams(
+              linkHandlerParams: PdfLinkHandlerParams(
+                linkColor: const Color(0x00000000),
+                onLinkTap: (link) =>
+                    showDictionaryDialog(context, link.url.toString()),
+              ),
+              enableKeyboardNavigation: false,
+              scaleEnabled: false,
+              panEnabled: false,
+              margin: 0,
+              backgroundColor: Colors.white,
+              pageDropShadow: const BoxShadow(
+                color: Colors.transparent,
+                blurRadius: 0,
+                spreadRadius: 0,
+              ),
+            ),
           ),
-          enableKeyboardNavigation: false,
-          scaleEnabled: false,
-          panEnabled: false,
-          margin: 0,
-          backgroundColor: Colors.white,
-          pageDropShadow: const BoxShadow(
-            color: Colors.transparent,
-            blurRadius: 0,
-            spreadRadius: 0,
+          Positioned(
+            right: 16,
+            bottom: 100,
+            child: FloatingActionButton(
+              heroTag: 'toggle',
+              mini: true,
+              backgroundColor: Color(0xFF0284c7).withOpacity(0.6),
+              foregroundColor: Colors.white,
+              onPressed: _toggleControls,
+              child: Icon(
+                  _isControlsVisible ? LucideIcons.eyeOff : LucideIcons.eye),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FadeTransition(
+        opacity: _animation,
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, 1),
+            end: Offset.zero,
+          ).animate(_animation),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            decoration: BoxDecoration(
+              color: Color(0xFF0284c7).withOpacity(0.6),
+              borderRadius: BorderRadius.circular(32),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildFAB(
+                  heroTag: 'home',
+                  icon: LucideIcons.home,
+                  onPressed: () => Navigator.popAndPushNamed(context, "/home"),
+                  tooltip: 'Home',
+                ),
+                _buildDivider(),
+                _buildFAB(
+                  heroTag: 'previous',
+                  icon: LucideIcons.arrowLeft,
+                  onPressed: () {
+                    if (_currentPage > 1) goToPage(_currentPage - 1);
+                  },
+                  tooltip: 'Previous Page',
+                ),
+                _buildFAB(
+                  heroTag: 'next',
+                  icon: LucideIcons.arrowRight,
+                  onPressed: () {
+                    if (_currentPage <= _controller.pageCount)
+                      goToPage(_currentPage + 1);
+                  },
+                  tooltip: 'Next Page',
+                ),
+                _buildDivider(),
+                _buildFAB(
+                  heroTag: 'ambient',
+                  icon: _isAmbientPlaying
+                      ? LucideIcons.volume2
+                      : LucideIcons.volumeX,
+                  onPressed: () {
+                    setState(() {
+                      _isAmbientPlaying = !_isAmbientPlaying;
+                      _isAmbientPlaying
+                          ? _ambientPlayer.play()
+                          : _ambientPlayer.pause();
+                    });
+                  },
+                  tooltip: 'Toggle Ambient Sound',
+                ),
+                _buildFAB(
+                  heroTag: 'story',
+                  icon: _isStoryPlaying
+                      ? LucideIcons.pauseCircle
+                      : LucideIcons.playCircle,
+                  onPressed: () {
+                    setState(() {
+                      _isStoryPlaying = !_isStoryPlaying;
+                      _isStoryPlaying
+                          ? _storyPlayer.play()
+                          : _storyPlayer.pause();
+                    });
+                  },
+                  tooltip: 'Toggle Story Narration',
+                ),
+                _buildDivider(),
+                _buildFAB(
+                  heroTag: 'repeat',
+                  icon: LucideIcons.repeat,
+                  onPressed: () => goToPage(1),
+                  tooltip: 'Restart Story',
+                ),
+                _buildFAB(
+                  heroTag: 'savedPage',
+                  icon: LucideIcons.bookmark,
+                  onPressed: () async {
+                    final book =
+                        await BookController().loadBookState(_keyPrefix);
+                    setState(() => _currentPage = book.currentPage!);
+                    goToPage(_currentPage);
+                  },
+                  tooltip: 'Go to Saved Page',
+                ),
+              ],
+            ),
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FloatingActionButton(
-            heroTag: 'home',
-            onPressed: () {
-              Navigator.popAndPushNamed(context, "/home");
-            },
-            child: const Icon(LucideIcons.home),
-          ),
-          const SizedBox(width: 16),
-          FloatingActionButton(
-            heroTag: 'previous',
-            onPressed: () {
-              if (_currentPage > 1) {
-                goToPage(_currentPage - 1);
-              }
-            },
-            child: const Icon(LucideIcons.arrowLeft),
-          ),
-          const SizedBox(width: 16),
-          FloatingActionButton(
-            heroTag: 'next',
-            onPressed: () {
-              if (_currentPage <= _controller.pageCount) {
-                goToPage(_currentPage + 1);
-              }
-            },
-            child: const Icon(LucideIcons.arrowRight),
-          ),
-          const SizedBox(width: 16),
-          FloatingActionButton(
-            heroTag: 'ambient',
-            onPressed: () {
-              setState(() {
-                _isAmbientPlaying = !_isAmbientPlaying;
-                _isAmbientPlaying
-                    ? _ambientPlayer.play()
-                    : _ambientPlayer.pause();
-              });
-            },
-            child: Icon(
-                _isAmbientPlaying ? LucideIcons.volume2 : LucideIcons.volumeX),
-          ),
-          const SizedBox(width: 16),
-          FloatingActionButton(
-            heroTag: 'story',
-            onPressed: () {
-              setState(() {
-                _isStoryPlaying = !_isStoryPlaying;
-                _isStoryPlaying ? _storyPlayer.play() : _storyPlayer.pause();
-              });
-            },
-            child: Icon(_isStoryPlaying
-                ? LucideIcons.pauseCircle
-                : LucideIcons.playCircle),
-          ),
-          const SizedBox(width: 16),
-          FloatingActionButton(
-            heroTag: 'repeat',
-            onPressed: () => goToPage(1),
-            child: const Icon(LucideIcons.repeat),
-          ),
-          const SizedBox(width: 16),
-          FloatingActionButton(
-            heroTag: 'savedPage',
-            onPressed: () async {
-              final book = await BookController().loadBookState(_keyPrefix);
-              setState(() {
-                _currentPage = book.currentPage!;
-              });
+    );
+  }
 
-              goToPage(_currentPage);
-            },
-            child: const Icon(LucideIcons.bookmark),
-          ),
-          const SizedBox(width: 16),
-        ],
+  Widget _buildFAB({
+    required String heroTag,
+    required IconData icon,
+    required VoidCallback onPressed,
+    required String tooltip,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Tooltip(
+        message: tooltip,
+        child: FloatingActionButton(
+          heroTag: heroTag,
+          onPressed: onPressed,
+          mini: true,
+          backgroundColor: Colors.white.withOpacity(0.9),
+          foregroundColor: Colors.black87,
+          elevation: 0,
+          hoverElevation: 2,
+          child: Icon(icon, size: 20),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDivider() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Container(
+        height: 24,
+        width: 1,
+        color: Colors.white.withOpacity(0.3),
       ),
     );
   }
