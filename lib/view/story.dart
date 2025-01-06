@@ -64,6 +64,10 @@ class _StoryBookState extends State<StoryBook>
 
   void goToPage(int page) {
     if (_controller.isReady) {
+      Offset zoomCenter = Offset(0.0, 0.0); // Top-left corner
+      double zoomLevel = 0.8; // 80% zoom
+
+      _controller.setZoom(zoomCenter, zoomLevel);
       _controller.setCurrentPageNumber(page);
       _controller.goToPage(pageNumber: page);
       setState(() {
