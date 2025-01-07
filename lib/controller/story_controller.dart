@@ -389,7 +389,7 @@ class BookController {
               "assets/audios/book3/Vocal_Page3.mp3",
               "assets/audios/book3/Vocal_Page4.mp3",
               "assets/audios/book3/Vocal_Page5.mp3",
-              "assets/audios/book3/Vocal_Page7.mp3",
+              "assets/audios/book3/Vocal_Page6.mp3",
               "assets/audios/book3/Vocal_Page7.mp3",
               "assets/audios/book3/Vocal_Page8.mp3",
             ]),
