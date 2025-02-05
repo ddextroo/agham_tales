@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/splash': (context) => const Splashscreen(),
         '/onboarding': (context) => OnboardingScreen(),
         '/home': (context) => const HomeScreen(),
+        '/quiz': (context) => const QuizCard(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/story') {
@@ -57,14 +58,14 @@ class MyApp extends StatelessWidget {
             builder: (context) => BeforeQuizScreen(book: bookPath, title: title,),
           );
         }
-        if (settings.name == '/quiz') {
-          final args = settings.arguments as Map<String, dynamic>?;
-          final bookPath = args?['book'] ?? '';
-          final title = args?['title'] ?? '';
-          return MaterialPageRoute(
-            builder: (context) => QuizCard(book: bookPath, title: title,),
-          );
-        }
+        // if (settings.name == '/quiz') {
+        //   final args = settings.arguments as Map<String, dynamic>?;
+        //   final bookPath = args?['book'] ?? '';
+        //   final title = args?['title'] ?? '';
+        //   return MaterialPageRoute(
+        //     builder: (context) => QuizCard(book: bookPath, title: title,),
+        //   );
+        // }
         return null; // If no route matches, return null
       },
     );
