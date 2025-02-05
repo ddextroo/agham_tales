@@ -41,7 +41,7 @@ class _StoryBookState extends State<StoryBook>
 
   Future<void> _initAudioPlayers() async {
     final session = await AudioSession.instance;
-    await session.configure(const AudioSessionConfiguration.speech());
+    await session.configure(const AudioSessionConfiguration.music());
     final book = await BookController().loadBookState(_keyPrefix);
     // await AudioPlayer.clearAssetCache();
 
@@ -54,8 +54,8 @@ class _StoryBookState extends State<StoryBook>
     await _ambientPlayer.setAsset(book.audios.ambient ?? "");
     await _ambientPlayer.play();
     await _ambientPlayer.setLoopMode(LoopMode.all);
-    await _ambientPlayer.setVolume(1.0);
-    await _storyPlayer.setVolume(1.0);
+    await _ambientPlayer.setVolume(100.0);
+    await _storyPlayer.setVolume(100.0);
 
     if (book.audios.audioPerPage.isNotEmpty) {
       await _storyPlayer.setAsset(book.audios.audioPerPage[0]);
