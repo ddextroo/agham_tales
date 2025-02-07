@@ -50,6 +50,7 @@ dependencies:
   audio_session: ^0.1.23
   rename_app: ^1.6.1
   change_app_package_name: ^1.4.0
+  confetti: ^0.8.0
 
 dev_dependencies:
   flutter_test:
@@ -97,7 +98,7 @@ flutter:
     - assets/images/
     - assets/icon/
     - assets/images/cover_books/
-    - assets/images/quiz_audio/
+    - assets/audios/quiz_audio/
     - assets/stories/
     - assets/audios/book1/
     - assets/audios/book2/

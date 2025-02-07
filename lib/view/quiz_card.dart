@@ -11,7 +11,8 @@ class QuizCard extends StatefulWidget {
   final String book;
   final String title;
 
-  const QuizCard({Key? key, required this.book, required this.title}) : super(key: key);
+  const QuizCard({Key? key, required this.book, required this.title})
+      : super(key: key);
 
   @override
   _QuizCardState createState() => _QuizCardState();
@@ -22,14 +23,27 @@ class _QuizCardState extends State<QuizCard> {
   String? selectedAnswer;
   bool showFeedback = false;
   int score = 0;
-  late List<Quiz> quizzes;
+  List<Quiz>? quizzes;
   late String _keyPrefix;
-  late AudioPlayer _quizPlayer;
+  late AudioPlayer _correctSoundPlayer;
+  late AudioPlayer _wrongSoundPlayer;
+  late AudioPlayer _quizCompletePlayer;
 
   @override
   void initState() {
     _keyPrefix = 'book_${widget.title.hashCode}';
     super.initState();
+
+    _correctSoundPlayer = AudioPlayer();
+    _wrongSoundPlayer = AudioPlayer();
+    _quizCompletePlayer = AudioPlayer();
+
+    _correctSoundPlayer.setAsset('assets/audios/quiz_audio/success.mp3');
+    _wrongSoundPlayer.setAsset('assets/audios/quiz_audio/fail.mp3');
+    _quizCompletePlayer.setAsset('assets/audios/quiz_audio/after.mp3').then((_) {
+      _quizCompletePlayer.setLoopMode(LoopMode.one);
+    });
+
     _initQuiz();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
@@ -40,67 +54,102 @@ class _QuizCardState extends State<QuizCard> {
 
   Future<void> _initQuiz() async {
     final book = await BookController().loadBookState(_keyPrefix);
-    setState(() {
-      quizzes = book.quizzes;
-    });
+    setState(() => quizzes = book.quizzes);
   }
 
   void handleAnswer(String answer) {
+    final isCorrect = answer == quizzes![currentQuestionIndex].correctAnswer;
+    final isLastQuestion = currentQuestionIndex == quizzes!.length - 1;
+
     setState(() {
       selectedAnswer = answer;
       showFeedback = true;
-      if (answer == quizzes[currentQuestionIndex].correctAnswer) {
-        score++;
-      }
+      if (isCorrect) score++;
     });
+
+    (isCorrect ? _correctSoundPlayer : _wrongSoundPlayer)
+      ..seek(Duration.zero)
+      ..play();
+
+    if (isLastQuestion) {
+      _quizCompletePlayer.seek(Duration.zero);
+      _quizCompletePlayer.play();
+    }
   }
 
-  void handleNext() {
+  Future<void> handleNext() async {
+    await _correctSoundPlayer.stop();
+    await _wrongSoundPlayer.stop();
+    await _quizCompletePlayer.stop();
+
     setState(() {
-      if (currentQuestionIndex < quizzes.length - 1) {
-        currentQuestionIndex++;
-        selectedAnswer = null;
-        showFeedback = false;
-      } else {
-        saveQuizScore(score);
-      }
+      currentQuestionIndex++;
+      selectedAnswer = null;
+      showFeedback = false;
     });
   }
 
-  void handleTryAgain() {
-    saveQuizScore(score);
-    Navigator.popAndPushNamed(context, "/home");
+  void _showScoreDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Quiz Complete! 🎉'),
+        content: Text('Your Score: $score/${quizzes!.length}'),
+        actions: [
+          TextButton(
+            child: const Text('Try Again'),
+            onPressed: () {
+              Navigator.pop(context);
+              setState(() {
+                currentQuestionIndex = 0;
+                score = 0;
+                selectedAnswer = null;
+                showFeedback = false;
+              });
+              _quizCompletePlayer.stop();
+            },
+          ),
+          TextButton(
+            child: const Text('Go Home'),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.popAndPushNamed(context, "/home");
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> saveQuizScore(int score) async {
     await BookController().saveQuizScore(_keyPrefix, score);
-    final String? nextBook = await BookController().getNextBookKeyPrefix(_keyPrefix);
-    await BookController().unlockNextBook(nextBook!);
+    final nextBook = await BookController().getNextBookKeyPrefix(_keyPrefix);
+    if (nextBook != null) await BookController().unlockNextBook(nextBook);
+  }
+
+  @override
+  void dispose() {
+    _correctSoundPlayer.dispose();
+    _wrongSoundPlayer.dispose();
+    _quizCompletePlayer.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (quizzes == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
+    if (quizzes == null) return const Scaffold(body: Center(child: CircularProgressIndicator()));
 
-    final currentQuiz = quizzes[currentQuestionIndex];
-    final isCorrect = selectedAnswer == currentQuiz.correctAnswer;
-    final isLastQuestion = currentQuestionIndex == quizzes.length - 1;
+    final currentQuiz = quizzes![currentQuestionIndex];
+    final isLastQuestion = currentQuestionIndex == quizzes!.length - 1;
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF87CEEB), // Sky blue background
-        ),
+        decoration: const BoxDecoration(color: Color(0xFF87CEEB)),
         child: SafeArea(
           child: Stack(
             children: [
-              // Cloud animations
-              CloudsOverlay(cloudCount: 20),
-
+              const CloudsOverlay(cloudCount: 20),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0, right: 16.0, left: 16.0),
                 child: Column(
@@ -112,7 +161,7 @@ class _QuizCardState extends State<QuizCard> {
                           Container(
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
-                              color: const Color(0xFFD2B48C), // Tan color for the card
+                              color: const Color(0xFFD2B48C),
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: [
                                 BoxShadow(
@@ -133,7 +182,7 @@ class _QuizCardState extends State<QuizCard> {
                                   width: 200,
                                   height: 40,
                                   child: Text(
-                                    'Question ${currentQuestionIndex + 1} to ${quizzes.length}',
+                                    'Question ${currentQuestionIndex + 1} of ${quizzes!.length}',
                                     style: const TextStyle(fontSize: 16),
                                   ),
                                 ),
@@ -154,10 +203,14 @@ class _QuizCardState extends State<QuizCard> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      isCorrect ? currentQuiz.correctFeedback : currentQuiz.incorrectFeedback,
+                                      selectedAnswer == currentQuiz.correctAnswer
+                                          ? currentQuiz.correctFeedback
+                                          : currentQuiz.incorrectFeedback,
                                       style: TextStyle(
                                         fontStyle: FontStyle.italic,
-                                        color: isCorrect ? Colors.green : Colors.red,
+                                        color: selectedAnswer == currentQuiz.correctAnswer
+                                            ? Colors.green
+                                            : Colors.red,
                                       ),
                                       textAlign: TextAlign.center,
                                     ),
@@ -166,7 +219,6 @@ class _QuizCardState extends State<QuizCard> {
                               ],
                             ),
                           ),
-
                         ],
                       ),
                     ),
@@ -178,27 +230,60 @@ class _QuizCardState extends State<QuizCard> {
                           crossAxisCount: 2,
                           mainAxisSpacing: 8,
                           crossAxisSpacing: 8,
-                          childAspectRatio: 3.5, // Increased to make buttons even shorter
+                          childAspectRatio: 3.5,
                           shrinkWrap: true,
                           children: currentQuiz.choices.entries.map((entry) {
                             final choiceKey = entry.key;
-                            final choiceText = entry.value;
+                            final isCorrect = choiceKey == currentQuiz.correctAnswer;
+                            final isSelected = choiceKey == selectedAnswer;
+
                             return ElevatedButton(
-                              child: Text(
-                                '$choiceKey. $choiceText',
-                                style: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold), // Further reduced font size
-                                textAlign: TextAlign.center,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  if (showFeedback) ...[
+                                    Icon(
+                                      isCorrect ? Icons.check : (isSelected ? Icons.close : null),
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                    const SizedBox(width: 4),
+                                  ],
+                                  Text(
+                                    '$choiceKey. ${entry.value}',
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: selectedAnswer == choiceKey
-                                    ? (isCorrect ? Colors.green : Colors.red)
-                                    : const Color(0xFFF1C40F), // Yellow color
+                                backgroundColor: showFeedback
+                                    ? (isCorrect
+                                    ? Colors.green
+                                    : isSelected
+                                    ? Colors.red
+                                    : const Color(0xFFF1C40F))
+                                    : const Color(0xFFF1C40F),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30), // Further reduced border radius
-                                  side: const BorderSide(color: Colors.white, width: 1), // Thinner white outline
+                                  borderRadius: BorderRadius.circular(30),
+                                  side: BorderSide(
+                                    color: showFeedback
+                                        ? (isCorrect
+                                        ? Colors.green.shade800
+                                        : isSelected
+                                        ? Colors.red.shade800
+                                        : Colors.white)
+                                        : Colors.white,
+                                    width: 2,
+                                  ),
                                 ),
                               ),
-                              onPressed: selectedAnswer == null ? () => handleAnswer(choiceKey) : null,
+                              onPressed: selectedAnswer == null
+                                  ? () => handleAnswer(choiceKey)
+                                  : null,
                             );
                           }).toList(),
                         ),
@@ -213,23 +298,33 @@ class _QuizCardState extends State<QuizCard> {
       ),
       floatingActionButton: showFeedback
           ? ElevatedButton(
-        onPressed: isLastQuestion ? handleTryAgain : handleNext,
+        onPressed: () async {
+          if (isLastQuestion) {
+            await saveQuizScore(score);
+            _showScoreDialog();
+          } else {
+            await handleNext();
+          }
+        },
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              isLastQuestion ? 'Go back to home' : 'Next',
-              style: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
+              isLastQuestion ? 'Finish Quiz' : 'Next',
+              style: const TextStyle(
+                  fontSize: 10,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
             ),
             const SizedBox(width: 4),
             Icon(
-              isLastQuestion ? LucideIcons.home : LucideIcons.arrowRight,
+              isLastQuestion ? LucideIcons.trophy : LucideIcons.arrowRight,
               size: 14,
             ),
           ],
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFF1C40F), // Yellow color
+          backgroundColor: const Color(0xFFF1C40F),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
             side: const BorderSide(color: Colors.white, width: 1),
@@ -242,4 +337,3 @@ class _QuizCardState extends State<QuizCard> {
     );
   }
 }
-
