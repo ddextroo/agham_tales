@@ -97,6 +97,7 @@ flutter:
     - assets/images/
     - assets/icon/
     - assets/images/cover_books/
+    - assets/images/quiz_audio/
     - assets/stories/
     - assets/audios/book1/
     - assets/audios/book2/

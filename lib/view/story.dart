@@ -48,14 +48,12 @@ class _StoryBookState extends State<StoryBook>
     _ambientPlayer = AudioPlayer();
     _storyPlayer = AudioPlayer();
 
-    print(book.audios.ambient);
 
     // Load and loop ambient audio
     await _ambientPlayer.setAsset(book.audios.ambient ?? "");
     await _ambientPlayer.play();
     await _ambientPlayer.setLoopMode(LoopMode.all);
-    await _ambientPlayer.setVolume(100.0);
-    await _storyPlayer.setVolume(100.0);
+
 
     if (book.audios.audioPerPage.isNotEmpty) {
       await _storyPlayer.setAsset(book.audios.audioPerPage[0]);
@@ -297,7 +295,10 @@ class _StoryBookState extends State<StoryBook>
                   icon: _isStoryPlaying
                       ? LucideIcons.pauseCircle
                       : LucideIcons.playCircle,
-                  onPressed: () {
+                  onPressed: ()  async {
+                    await _ambientPlayer.setVolume(1);
+                    await _storyPlayer.setVolume(1);
+
                     setState(() {
                       _isStoryPlaying = !_isStoryPlaying;
                       _isStoryPlaying
