@@ -89,6 +89,13 @@ class _QuizCardState extends State<QuizCard> {
     });
   }
 
+  Future<void> stopAllPlayers() async {
+    await _correctSoundPlayer.stop();
+    await _wrongSoundPlayer.stop();
+    await _quizCompletePlayer.stop();
+  }
+
+
   void _showScoreDialog() {
     showDialog(
       context: context,
@@ -99,8 +106,9 @@ class _QuizCardState extends State<QuizCard> {
         actions: [
           TextButton(
             child: const Text('Try Again'),
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
+              await stopAllPlayers();
               setState(() {
                 currentQuestionIndex = 0;
                 score = 0;
@@ -112,7 +120,8 @@ class _QuizCardState extends State<QuizCard> {
           ),
           TextButton(
             child: const Text('Go Home'),
-            onPressed: () {
+            onPressed: () async {
+              await stopAllPlayers();
               // Navigator.pop(context);
               Navigator.popAndPushNamed(context, "/home");
             },
