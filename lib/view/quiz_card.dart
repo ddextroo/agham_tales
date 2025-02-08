@@ -113,7 +113,7 @@ class _QuizCardState extends State<QuizCard> {
           TextButton(
             child: const Text('Go Home'),
             onPressed: () {
-              Navigator.pop(context);
+              // Navigator.pop(context);
               Navigator.popAndPushNamed(context, "/home");
             },
           ),
@@ -149,7 +149,7 @@ class _QuizCardState extends State<QuizCard> {
         child: SafeArea(
           child: Stack(
             children: [
-              const CloudsOverlay(cloudCount: 20),
+              const CloudsOverlay(cloudCount: 50),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0, right: 16.0, left: 16.0),
                 child: Column(
@@ -199,7 +199,7 @@ class _QuizCardState extends State<QuizCard> {
                                   ),
                                 ),
                                 if (showFeedback) ...[
-                                  const SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
@@ -230,7 +230,7 @@ class _QuizCardState extends State<QuizCard> {
                           crossAxisCount: 2,
                           mainAxisSpacing: 8,
                           crossAxisSpacing: 8,
-                          childAspectRatio: 3.5,
+                          childAspectRatio: 3.5, // Adjusted aspect ratio
                           shrinkWrap: true,
                           children: currentQuiz.choices.entries.map((entry) {
                             final choiceKey = entry.key;
@@ -238,26 +238,34 @@ class _QuizCardState extends State<QuizCard> {
                             final isSelected = choiceKey == selectedAnswer;
 
                             return ElevatedButton(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  if (showFeedback) ...[
-                                    Icon(
-                                      isCorrect ? Icons.check : (isSelected ? Icons.close : null),
-                                      color: Colors.white,
-                                      size: 16,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    if (showFeedback) ...[
+                                      Icon(
+                                        isCorrect ? Icons.check : (isSelected ? Icons.close : null),
+                                        color: Colors.white,
+                                        size: 16,
+                                      ),
+                                      const SizedBox(width: 4),
+                                    ],
+                                    Flexible( // Added Flexible widget
+                                      child: Text(
+                                        '$choiceKey. ${entry.value}',
+                                        softWrap: true, // Enabled text wrapping
+                                        maxLines: 2, // Limit to 2 lines
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 12, // Slightly increased font size
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
-                                    const SizedBox(width: 4),
                                   ],
-                                  Text(
-                                    '$choiceKey. ${entry.value}',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: showFeedback

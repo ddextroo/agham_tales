@@ -339,45 +339,40 @@ class BookController {
         },
         quizzes: [
           Quiz(
-              question: "What motion is the paper plane showing?",
-              choices: {"A": "Flying", "B": "Rolling", "C": "Spinning"},
-              correctFeedback:
-              "🎉 The paper plane glides offscreen with a 'Whoosh!' sound and a glowing trail.",
-              incorrectFeedback:
-              "🚫 The paper plane wobbles and falls to the ground with a funny 'thud' sound. Oops! Paper planes fly through the air. Try again!",
-              correctAnswer: 'A'),
+            question: "What caused the papers to move in the story?",
+            choices: {"A": "Milo’s hand", "B": "The wind", "C": "Lily’s toy cart", "D": "Zara’s foot"},
+            correctFeedback: "🎉 The wind blows the papers away gently, making them flutter in the air.",
+            incorrectFeedback: "🚫 The papers stay in place. Think about what naturally moves lightweight objects. Try again!",
+            correctAnswer: 'B',
+          ),
           Quiz(
-              question: "Help Lily find her toy cart!",
-              choices: {"A": "Ball", "B": "Spinning Top", "C": "Toy Cart"},
-              correctFeedback:
-              "🎉 The toy cart rolls to Lily with a cheerful sound, and Lily waves.",
-              incorrectFeedback:
-              "🚫 If the wrong object is dragged, it wobbles and bounces back to its original spot. Hmm, the cart rolls. Try again!",
-              correctAnswer: 'C'),
+            question: "What kind of motion did Lily show with her toy top?",
+            choices: {"A": "Rolling motion", "B": "Spinning motion", "C": "Flying motion", "D": "Swinging motion"},
+            correctFeedback: "🎉 The toy top spins faster with a glowing effect and a soft whirring sound.",
+            incorrectFeedback: "🚫 The toy top doesn’t roll or fly. Think about how tops move. Try again!",
+            correctAnswer: 'B',
+          ),
           Quiz(
-              question: "What motion does a swing show?",
-              choices: {"A": "Back-and-Forth", "B": "Spinning", "C": "Flying"},
-              correctFeedback:
-              "🎉 The swing moves faster with a fun creaking sound, and cheerful kids appear in the background.",
-              incorrectFeedback:
-              "🚫 The swing slows down and stops briefly. Not quite! Swings go back and forth. Try again!",
-              correctAnswer: 'A'),
+            question: "What did Lily use to show rolling motion?",
+            choices: {"A": "A toy top", "B": "A ball", "C": "A swing", "D": "A paper plane"},
+            correctFeedback: "🎉 The ball rolls smoothly with a ‘whoosh’ sound, showing rolling motion.",
+            incorrectFeedback: "🚫 The object wobbles but doesn’t roll. Look for something that moves smoothly on the ground. Try again!",
+            correctAnswer: 'B',
+          ),
           Quiz(
-              question: "Zara is curious: What makes the spinning top move?",
-              choices: {"A": "Push", "B": "Wind", "C": "Rolling"},
-              correctFeedback:
-              "🎉 The top glows and spins faster, with sparkles around it.",
-              incorrectFeedback:
-              "🚫 The top slows down and tilts slightly. Hmm, think about what made the top start moving. Try again!",
-              correctAnswer: 'A'),
+            question: "How did Lily describe motion on the swing?",
+            choices: {"A": "The swing was spinning.", "B": "The swing was moving back and forth.", "C": "The swing was rolling on the grass.", "D": "The swing was flying in the air."},
+            correctFeedback: "🎉 The swing moves higher with a cheerful creaking sound, showing back-and-forth motion.",
+            incorrectFeedback: "🚫 The swing stays still. Think about how swings move at the playground. Try again!",
+            correctAnswer: 'B',
+          ),
           Quiz(
-              question: "Milo wonders: Which of these objects shows rolling motion?",
-              choices: {"A": "Ball", "B": "Kite", "C": "Spinning Top"},
-              correctFeedback:
-              "🎉 The ball rolls offscreen with a 'Ta-da!' sound, and a mini fireworks animation appears.",
-              incorrectFeedback:
-              "🚫 The incorrect object wiggles and stays in place. Look for something that rolls. Try again!",
-              correctAnswer: 'A'),
+            question: "What did Zara say motion is?",
+            choices: {"A": "The way objects stand still.", "B": "The movement of objects, like rolling, spinning, or swinging.", "C": "The noise objects make when they move.", "D": "The colors of objects when they are still."},
+            correctFeedback: "🎉 Objects move in different ways—rolling, spinning, or swinging. That’s motion!",
+            incorrectFeedback: "🚫 Motion is all about movement! Think about what happens when objects move. Try again!",
+            correctAnswer: 'B',
+          ),
         ],
         audios: StoryAudio(
             ambient: "assets/audios/book2/ambient.mp3",
