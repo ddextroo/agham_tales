@@ -530,7 +530,6 @@ class BookController {
             introAudio: "assets/audios/book4/intro.mp3",
             audioPerPage: [
               "assets/audios/book4/intro.mp3",
-              "assets/audios/book4/Vocal_Page1.MP3",
               "assets/audios/book4/Vocal_Page2.MP3",
               "assets/audios/book4/Vocal_Page3.MP3",
               "assets/audios/book4/Vocal_Page4.MP3",
@@ -685,23 +684,21 @@ class BookController {
 
   Future<String?> getNextBookKeyPrefix(String currentKeyPrefix) async {
     final prefs = await SharedPreferences.getInstance();
-
     List<Book> books = await getBooks();
 
     int currentBookIndex = books.indexWhere(
-        (book) => 'book_${book.title.hashCode}' == currentKeyPrefix);
+          (book) => 'book_${book.title.hashCode}' == currentKeyPrefix,
+    );
 
-    if (currentBookIndex == -1) {
+    // Check if current book is the last one or not found
+    if (currentBookIndex == -1 || currentBookIndex + 1 >= books.length) {
       return null;
     }
 
-    final keyPrefix = 'book_${books[currentBookIndex + 1].title.hashCode}';
-    print(keyPrefix);
+    final nextBook = books[currentBookIndex + 1];
+    final keyPrefix = 'book_${nextBook.title.hashCode}';
     bool isLocked = prefs.getBool('$keyPrefix.isLocked') ?? true;
-    if (isLocked) {
-      return keyPrefix;
-    }
 
-    return null;
+    return isLocked ? keyPrefix : null;
   }
 }
